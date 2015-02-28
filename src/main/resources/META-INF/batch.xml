@@ -1,0 +1,6 @@
+<batch-artifacts xmlns="http://xmlns.jcp.org/xml/ns/javaee">
+    <ref id="myBatchlet" class="org.nailedtothex.example.MyBatchlet"/>
+    <ref id="myItemReader" class="org.nailedtothex.example.MyItemReader"/>
+    <ref id="myItemProcessor" class="org.nailedtothex.example.MyItemProcessor"/>
+    <ref id="myItemWriter" class="org.nailedtothex.example.MyItemWriter"/>
+</batch-artifacts>
