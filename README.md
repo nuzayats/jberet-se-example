@@ -7,4 +7,4 @@ To execute issue following command:
 
 The batch creates embedded Derby database in ./target/mydb. you can easily check what data were saved as follows:
 
-    $ ij < select.sql
+    $ ij select.sql

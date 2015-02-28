@@ -21,15 +21,20 @@ public class MyBatchlet extends AbstractBatchlet {
                     // nop
                 }
                 st.executeUpdate("create table src (data int)");
-                st.executeUpdate("create table dest (data int)");
+                st.executeUpdate("create table dest (data int primary key)");
             }
 
             cn.setAutoCommit(false);
             try (PreparedStatement ps = cn.prepareStatement("insert into src (data) values (?)")) {
-                for (int i = 1; i <= 30; i++) {
+                for (int i = 1; i <= 20; i++) {
                     ps.setInt(1, i);
                     ps.executeUpdate();
                 }
+
+                // to make exception happen in ItemWriter due to duplicate key
+                ps.setInt(1, 15);
+                ps.executeUpdate();
+
                 cn.commit();
             }
         }

@@ -1,19 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <job id="myjob" version="1.0" xmlns="http://xmlns.jcp.org/xml/ns/javaee">
+    <properties>
+        <property name="url" value="jdbc:derby:./target/mydb"/>
+    </properties>
 
     <step id="prepare" next="test">
         <batchlet ref="myBatchlet"/>
     </step>
 
     <step id="test">
-        <properties>
-            <property name="jberet.local-tx" value="true"/>
-        </properties>
         <chunk>
-            <reader ref="myItemReader"/>
+            <reader ref="jdbcItemReader">
+                <properties>
+                    <property name="beanType" value="java.util.Map"/>
+                    <property name="sql" value="select data from src order by data"/>
+                    <property name="url" value="#{jobProperties['url']}"/>
+                    <property name="resultSetProperties"
+                              value="fetchSize=100, resultSetConcurrency=CONCUR_UPDATABLE, fetchDirection=FETCH_REVERSE, resultSetType=TYPE_SCROLL_SENSITIVE, resultSetHoldability=HOLD_CURSORS_OVER_COMMIT"/>
+                </properties>
+            </reader>
             <processor ref="myItemProcessor"/>
-            <writer ref="myItemWriter"/>
+            <writer ref="jdbcItemWriter">
+                <properties>
+                    <property name="sql" value="insert into dest (data) values (?)"/>
+                    <property name="url" value="#{jobProperties['url']}"/>
+                </properties>
+            </writer>
         </chunk>
     </step>
-
 </job>
