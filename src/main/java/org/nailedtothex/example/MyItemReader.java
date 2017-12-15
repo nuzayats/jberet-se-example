@@ -1,5 +1,7 @@
 package org.nailedtothex.example;
 
+import org.apache.commons.dbutils.DbUtils;
+
 import javax.batch.api.chunk.AbstractItemReader;
 import java.io.Serializable;
 import java.sql.Connection;
@@ -19,35 +21,15 @@ public class MyItemReader extends AbstractItemReader {
     }
 
     @Override
-    public void close() throws Exception {
-        if (rs != null) {
-            try {
-                rs.close();
-            } catch (Exception e) {
-                // nop
-            }
-        }
-        if (st != null) {
-            try {
-                st.close();
-            } catch (Exception e) {
-                // nop
-            }
-        }
-        if (cn != null) {
-            try {
-                cn.close();
-            } catch (Exception e) {
-                // nop
-            }
-        }
-    }
-
-    @Override
     public Object readItem() throws Exception {
         if (rs.next()) {
             return rs.getInt(1);
         }
         return null;
+    }
+
+    @Override
+    public void close() throws Exception {
+        DbUtils.closeQuietly(cn, st, rs);
     }
 }

@@ -28,6 +28,11 @@
             <artifactId>jberet-se</artifactId>
             <version>${org.jberet.version}</version>
         </dependency>
+        <dependency>
+            <groupId>commons-dbutils</groupId>
+            <artifactId>commons-dbutils</artifactId>
+            <version>1.7</version>
+        </dependency>
 
         <!-- runtime dependencies -->
         <dependency>
