@@ -11,12 +11,12 @@ public class MyBatchlet extends AbstractBatchlet {
         try (Connection cn = MyDatabaseUtil.getConnection()) {
             try (Statement st = cn.createStatement()) {
                 try {
-                    st.executeUpdate("drop table if exists src");
+                    st.executeUpdate("drop table src");
                 } catch (Exception e) {
                     // nop
                 }
                 try {
-                    st.executeUpdate("drop table if exists dest");
+                    st.executeUpdate("drop table dest");
                 } catch (Exception e) {
                     // nop
                 }
