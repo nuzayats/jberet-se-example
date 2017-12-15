@@ -1,10 +1,10 @@
 package org.nailedtothex.example;
 
+import org.apache.commons.dbutils.QueryRunner;
 import org.junit.Test;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,15 +17,23 @@ public class MyMainTest {
     public void myjobWorks() throws Exception {
         org.jberet.se.Main.main(new String[]{"myjob"});
 
-        final List<Integer> results = new ArrayList<>();
-        try (final Connection cn = MyDatabaseUtil.getConnection();
-             final Statement st = cn.createStatement()) {
-            try (final ResultSet rs = st.executeQuery("select data from dest order by data")) {
-                while (rs.next()) {
-                    results.add(rs.getInt(1));
-                }
-            }
+        final List<Integer> actual = selectDataFromDest();
+        assertThat(actual.size(), is(30));
+    }
+
+    private static List<Integer> selectDataFromDest() throws SQLException {
+        final List<Integer> actual;
+        try (final Connection cn = MyDatabaseUtil.getConnection()) {
+            actual = new QueryRunner().query(cn, "select data from dest order by data",
+                    rs -> {
+                        final List<Integer> results = new ArrayList<>();
+                        while (rs.next()) {
+                            results.add(rs.getInt(1));
+                        }
+                        return results;
+                    }
+            );
         }
-        assertThat(results.size(), is(30));
+        return actual;
     }
 }
